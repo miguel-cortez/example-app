@@ -19,7 +19,7 @@ class ProductoSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Producto::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        for($i=1;$i<=1500;$i++){
+        for($i=1;$i<=500;$i++){
             $categoria = Categoria::inRandomOrder()->first();
             Producto::create(
                 [
