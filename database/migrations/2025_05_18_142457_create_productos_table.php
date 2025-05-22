@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('precio', total: 8, places: 2);
             $table->foreignId('categoria_id')->constrained(
                 table: 'categorias', indexName: 'productos_categoria_id'
-            )->restrictOnUpdate();;
+            );
             $table->timestamps();
         });
     }

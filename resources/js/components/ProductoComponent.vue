@@ -8,7 +8,6 @@
         </DataTable>
     </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue';
 
@@ -25,14 +24,6 @@ const getProductos = async () => {
   try {
     const response = await axios.get("/api/dashboard/productos");
     products.value = response.data
-    console.log(products.value)
-
-    /*
-      carreras.value = response.data;
-      response.data.forEach((item, index) => {
-        carreras.value[index].estado = (item.estado) == "A" ? "Activa": "Inactiva";
-      })
-    */
   } catch (err) {
     console.error(err);
   }
