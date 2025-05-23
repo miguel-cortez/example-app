@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\Producto;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class CategoriaController extends Controller
 {
     /**
@@ -14,7 +15,14 @@ class CategoriaController extends Controller
     {
         //
     }
-
+    public function getData(){
+        // para graficar cantidad de productos por categoría
+        $categorias = Producto::join('categorias', 'productos.categoria_id', '=', 'categorias.id')
+        ->select('categorias.nombre', DB::raw('COUNT(productos.id) as total_productos'))
+        ->groupBy('categorias.nombre')
+        ->get();
+        return response()->json($categorias);
+    }
     /**
      * Show the form for creating a new resource.
      */
