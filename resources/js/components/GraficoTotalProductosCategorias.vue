@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <Chart type="polarArea" :data="chartData" :options="chartOptions" />
+        <Chart type="bar" :data="chartData" :options="chartOptions" />
     </div>
 </template>
 

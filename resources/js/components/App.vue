@@ -63,7 +63,12 @@ const items = ref([
             {
                 icon: 'pi pi-slack',
                 label: 'Productos por categoría',
-                url: '/dashboard/prods_cat',
+                route: '/dashboard/prods_cat',
+            },
+            {
+                icon: 'pi pi-eye',
+                label: 'Preview Pdf',
+                route: '/dashboard/preview_pdf',
             },
         ]
     },
