@@ -1,4 +1,3 @@
-
 <template>
     <div class="card py-4">
         <Menubar :model="items">
