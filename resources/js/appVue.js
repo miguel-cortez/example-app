@@ -8,6 +8,7 @@ import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import 'primeicons/primeicons.css';
 import axios from 'axios'
+import Tooltip from 'primevue/tooltip';
 
 const app = createApp(App);
 
@@ -24,5 +25,6 @@ app.use(ToastService);
 
 app.component('Button', Button);
 app.component('Toast', Toast);
+app.directive('tooltip', Tooltip);
 window.Vue = app;
 app.mount('#app');

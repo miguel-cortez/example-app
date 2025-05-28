@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class ProductoController extends Controller
 {
     /**
@@ -15,6 +15,16 @@ class ProductoController extends Controller
         try{
             
             $productos = Producto::all();
+            return response()->json($productos);
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
+    public function obtenerFichasTecnicas(){
+        try{
+            $productos = DB::table('productos')
+            ->whereNotNull('ficha_tecnica')
+            ->get();
             return response()->json($productos);
         }catch(\Exception $e){
             return $e->getMessage();
