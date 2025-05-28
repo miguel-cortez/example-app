@@ -37,7 +37,6 @@ const getFichasTecnicas = async () => {
   try {
     const response = await axios.get("/api/dashboard/productos/fichas_tecnicas");
     productos.value = response.data
-    console.log(productos.value)
   } catch (err) {
     console.error(err);
   }
