@@ -31,7 +31,9 @@ const productos = ref([]);
 const url = ref(null)
 
 const cargarPdf = async (data) =>{
-    url.value = data.ficha_tecnica
+    if(data != null){
+        url.value = data.ficha_tecnica
+    }
 }
 const getFichasTecnicas = async () => {
   try {
