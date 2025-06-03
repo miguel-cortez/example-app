@@ -44,4 +44,11 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+    public function getUser(Request $request){
+        $user = Auth::user();
+        $roles = $user->getRoleNames();
+        $directPermissions = $user->getDirectPermissions();
+        $rolesPermissions = $user->getPermissionsViaRoles();
+        return response()->json(["user" => $user, "roles" => $roles, "directPermissions" => $directPermissions, "rolesPermissions" => $rolesPermissions]);
+    }
 }

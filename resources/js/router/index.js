@@ -20,6 +20,13 @@ const router = createRouter({
 });
 
 const loggedIn = () =>{
+    axios.post('/getuser')
+    .then(response => {
+      console.log('Datos recibidos:', response.data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
     return true;
 }
 
