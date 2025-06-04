@@ -3,7 +3,7 @@
         <Menubar :model="items">
             <template #item="{ item, props, hasSubmenu }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                    <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+                    <a v-if="accesoConcedido(item.roles)" v-ripple :href="href" v-bind="props.action" @click="navigate">
                         <span :class="item.icon" />
                         <span>{{ item.label }}</span>
                     </a>
@@ -17,13 +17,16 @@
         </Menubar>
     </div>
     <router-view></router-view>
+    <div>USUARIO: {{ usuarioAutenticado.roles }}</div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 import Menubar from 'primevue/menubar';
 
 const router = useRouter();
+
+const usuarioAutenticado = ref({})
 
 const items = ref([
     {
@@ -33,11 +36,8 @@ const items = ref([
             {
                 label: 'Productos',
                 icon: 'pi pi-tag',
-                route: '/dashboard/productos'
-            },
-            {
-                label: 'Unstyled',
-                route: '/theming/unstyled'
+                route: '/dashboard/productos',
+                roles: ['administrador']  // AGREGADA MACV
             }
         ]
     },
@@ -47,11 +47,13 @@ const items = ref([
         items: [
             {
                 label: 'Vue.js',
-                url: 'https://vuejs.org/'
+                url: 'https://vuejs.org/',
+                roles: ['estandar']  // AGREGADA MACV
             },
             {
                 label: 'Vite.js',
-                url: 'https://vitejs.dev/'
+                url: 'https://vitejs.dev/',
+                roles: ['estandar']  // AGREGADA MACV
             }
         ]
     },
@@ -63,11 +65,13 @@ const items = ref([
                 icon: 'pi pi-slack',
                 label: 'Productos por categoría',
                 route: '/dashboard/prods_cat',
+                roles: ['estandar']  // AGREGADA MACV
             },
             {
                 icon: 'pi pi-eye',
                 label: 'Preview Pdf',
                 route: '/dashboard/preview_pdf',
+                roles: ['estandar']  // AGREGADA MACV
             },
         ]
     },
@@ -79,6 +83,56 @@ const items = ref([
         }
     },
 ]);
+
+const getInfoUser = async () => {
+    // localStorage.clear();
+
+    /*
+    const infoUser = localStorage.getItem("infoUser");
+    if(infoUser == null ){
+      axios.post('/getuser')
+      .then(response => {
+        //console.log(response.data)
+        console.log(response.data.user)
+        console.log(response.data.roles)
+        console.log(response.data.rolesPermissions)
+        console.log(response.data.directPermissions)
+        localStorage.setItem("infoUser", JSON.stringify(response.data));
+        usuarioAutenticado.value = response.data;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }else{
+        usuarioAutenticado.value = JSON.parse(infoUser);
+        //console.log(user.value.roles[0])
+    }
+    */
+}
+
+onMounted(() => {
+  getInfoUser()
+})
+
+const accesoConcedido = (rolesPermitidos) => {
+    // Ejemplos
+    
+    // rolesPermitidos['estandar','administrador']
+    // user.value.roles['reporteador','bodeguero','estandar']
+
+    // Retorno. La función retorna true si el usuario tiene algún rol pemitido.
+
+    var resultado = false
+    if(usuarioAutenticado.value.roles != null){
+        rolesPermitidos.forEach(element => {
+            let dato = usuarioAutenticado.value.roles.find(el => el === element);
+            if(dato != null)
+                resultado = true;
+        });
+    }
+    return resultado
+}
+
 </script>
 
 <style scoped>
