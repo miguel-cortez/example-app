@@ -34,6 +34,8 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
+    /*
+
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
@@ -44,11 +46,24 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
-    public function getUser(Request $request){
+        */
+
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('javascript_code', "localStorage.removeItem('credenciales');");
+    }
+
+    public function getCredenciales(Request $request){
         $user = Auth::user();
-        $roles = $user->getRoleNames();
-        $directPermissions = $user->getDirectPermissions();
-        $rolesPermissions = $user->getPermissionsViaRoles();
-        return response()->json(["user" => $user, "roles" => $roles, "directPermissions" => $directPermissions, "rolesPermissions" => $rolesPermissions]);
+        $user->getPermissionsViaRoles();
+        $user->getDirectPermissions();
+        return response()->json(["user" => $user]);
     }
 }

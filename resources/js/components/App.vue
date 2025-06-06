@@ -17,7 +17,8 @@
         </Menubar>
     </div>
     <router-view></router-view>
-    <div>USUARIO: {{ usuarioAutenticado.roles }}</div>
+    <div v-if="credenciales.user">USUARIO: {{ credenciales.user.email }}</div>
+    <Button :onClick="borrarCredenciales">Borrar credenciales</Button>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
@@ -26,7 +27,7 @@ import Menubar from 'primevue/menubar';
 
 const router = useRouter();
 
-const usuarioAutenticado = ref({})
+const credenciales = ref({})
 
 const items = ref([
     {
@@ -37,7 +38,7 @@ const items = ref([
                 label: 'Productos',
                 icon: 'pi pi-tag',
                 route: '/dashboard/productos',
-                roles: ['administrador']  // AGREGADA MACV
+                roles: ['estandar']  // AGREGADA MACV
             }
         ]
     },
@@ -65,13 +66,13 @@ const items = ref([
                 icon: 'pi pi-slack',
                 label: 'Productos por categoría',
                 route: '/dashboard/prods_cat',
-                roles: ['estandar']  // AGREGADA MACV
+                roles: ['estandar','supervisor']  // AGREGADA MACV
             },
             {
                 icon: 'pi pi-eye',
                 label: 'Preview Pdf',
                 route: '/dashboard/preview_pdf',
-                roles: ['estandar']  // AGREGADA MACV
+                roles: ['administrador']  // AGREGADA MACV
             },
         ]
     },
@@ -84,35 +85,28 @@ const items = ref([
     },
 ]);
 
-const getInfoUser = async () => {
-    // localStorage.clear();
-
-    /*
-    const infoUser = localStorage.getItem("infoUser");
-    if(infoUser == null ){
-      axios.post('/getuser')
+const getCredenciales = async () => {
+    const cred = localStorage.getItem("credenciales");
+    if(cred == null ){
+      axios.post('/getcredenciales')
       .then(response => {
-        //console.log(response.data)
-        console.log(response.data.user)
-        console.log(response.data.roles)
-        console.log(response.data.rolesPermissions)
-        console.log(response.data.directPermissions)
-        localStorage.setItem("infoUser", JSON.stringify(response.data));
-        usuarioAutenticado.value = response.data;
+        localStorage.setItem("credenciales", JSON.stringify(response.data));
+        credenciales.value = response.data;
+        // Acceder a datos personales: credenciales.user.name
+        // Acceder a los permisos directos: credenciales.user.permissions
+        // Acceder a los roles: credenciales.user.roles
+        // Acceder a los permisos vinculados con el primer rol: credenciales.user.roles[0].permissions
+        // Acceder a al primer permiso vinculado con el primer rol del usuario: credenciales.user.roles[0].permissions[0]
+        // Acceder a los permisos vinculados con el primer rol: credenciales.user.roles[1].permissions
+        // Acceder a al primer permiso vinculado con el segundo rol del usuario: credenciales.user.roles[1].permissions[0]
       })
       .catch(error => {
         console.error('Error:', error);
       });
     }else{
-        usuarioAutenticado.value = JSON.parse(infoUser);
-        //console.log(user.value.roles[0])
+        credenciales.value = JSON.parse(cred);
     }
-    */
 }
-
-onMounted(() => {
-  getInfoUser()
-})
 
 const accesoConcedido = (rolesPermitidos) => {
     // Ejemplos
@@ -123,15 +117,31 @@ const accesoConcedido = (rolesPermitidos) => {
     // Retorno. La función retorna true si el usuario tiene algún rol pemitido.
 
     var resultado = false
-    if(usuarioAutenticado.value.roles != null){
+    if(credenciales.value.user != null){
         rolesPermitidos.forEach(element => {
-            let dato = usuarioAutenticado.value.roles.find(el => el === element);
-            if(dato != null)
+            let dato = credenciales.value.user.roles.find(el => el.name === element);
+            if(dato != null){
                 resultado = true;
+            }
         });
     }
     return resultado
 }
+
+const borrarCredenciales = () => {
+    const cred = localStorage.getItem("credenciales");
+    console.log("Borrando credenciales")
+    if(cred != null ){
+        localStorage.removeItem("credenciales");
+        credenciales.value.user = null
+        console.log("Credenciales borradas")
+    }
+}
+
+onMounted(() => {
+    console.log("onMounted")
+    getCredenciales()
+})
 
 </script>
 

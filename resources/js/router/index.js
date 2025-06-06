@@ -7,26 +7,32 @@ const routes = [
     { 
       path: '/dashboard/home', 
       name: 'home',
-      component: Home 
+      component: Home
     },
     {
       path: '/dashboard/productos', 
       component: Prod, 
       meta: { 
         requiresAuth: true,
-        roles: ['administrador'] 
+        roles: ['estandar'] 
       }
     },
     { 
       path: '/dashboard/prods_cat', 
-      component: ProdsCat 
+      component: ProdsCat,
+      meta:
+      {
+        requiresAuth: true,
+        roles: ['estandar','supervisor'] 
+      }
     },
     { 
       path: '/dashboard/preview_pdf',
       component: PreviewPdf,
       meta:
-      { requiresAuth: true 
-
+      {
+        requiresAuth: true,
+        roles: ['administrador'] 
       }
     }
 ];
@@ -36,13 +42,6 @@ const router = createRouter({
     routes,
 });
 
-const logeado = () => {
-  if(localStorage.getItem("infoUser") != null)
-    return true;
-  else
-    return false;
-}
-
 const accesoConcedido = (rolesPermitidos) => {
     // Ejemplos
     
@@ -51,11 +50,11 @@ const accesoConcedido = (rolesPermitidos) => {
 
     // Retorno. La función retorna true si el usuario tiene algún rol pemitido.
 
-    var usuarioAutenticado = JSON.parse(localStorage.getItem("infoUser"))
+    var credenciales = JSON.parse(localStorage.getItem("credenciales"))
     var resultado = false
-    if(usuarioAutenticado.roles != null){
+    if(credenciales.user != null){
         rolesPermitidos.forEach(element => {
-            let dato = usuarioAutenticado.roles.find(el => el === element);
+            let dato = credenciales.user.roles.find(el => el.name === element);
             if(dato != null)
                 resultado = true;
         });
@@ -64,18 +63,14 @@ const accesoConcedido = (rolesPermitidos) => {
 }
 
 router.beforeEach((to, from, next) => {
-  console.log("entrando")
-  console.log(logeado())
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
     if (!accesoConcedido(to.meta.roles)) {
       router.push({ name: 'home' })
     } else {
       next()
     }
   } else {
-    next() // make sure to always call next()!
+    next()
   }
 })
 
