@@ -23,7 +23,7 @@ const routes = [
       meta:
       {
         requiresAuth: true,
-        roles: ['estandar','supervisor'] 
+        roles: ['supervisor'] 
       }
     },
     { 
