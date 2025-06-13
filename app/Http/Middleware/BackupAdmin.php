@@ -16,8 +16,8 @@ class BackupAdmin
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
-        $user->getPermissionsViaRoles();
-        if ($user->roles[0]->name == "estandar") {
+        //$user->getPermissionsViaRoles();
+        if ($user->email == "mcortez_vasquez@yahoo.com") {
             return redirect('/home');
         }
         return $next($request);
