@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 class BackupAdmin
 {
     /**
@@ -16,10 +17,18 @@ class BackupAdmin
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
-        //$user->getPermissionsViaRoles();
-        if ($user->email == "mcortez_vasquez@yahoo.com") {
+        if (!$user->hasAnyRole(['administrador','supervisor'])) {
             return redirect('/home');
+        }else{
+            $permisos = $user->getAllPermissions();
+            $filtered = $permisos->filter(function (Permission $value, int $key) {
+                return $value->name = "crear backup";
+            });
+            if($filtered->count() == 0){
+                return redirect('/home');
+            }else{
+                return $next($request);
+            }
         }
-        return $next($request);
     }
 }
