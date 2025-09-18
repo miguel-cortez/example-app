@@ -1,4 +1,25 @@
 {
+  "_index-De5qB6SV.js": {
+    "file": "assets/index-De5qB6SV.js",
+    "name": "index",
+    "dynamicImports": [
+      "node_modules/chart.js/auto/auto.js"
+    ],
+    "css": [
+      "assets/index-MI7uxs2I.css"
+    ],
+    "assets": [
+      "assets/primeicons-DMOk5skT.eot",
+      "assets/primeicons-C6QP2o4f.woff2",
+      "assets/primeicons-WjwUDZjB.woff",
+      "assets/primeicons-MpK4pl85.ttf",
+      "assets/primeicons-Dr5RGzOO.svg"
+    ]
+  },
+  "_index-MI7uxs2I.css": {
+    "file": "assets/index-MI7uxs2I.css",
+    "src": "_index-MI7uxs2I.css"
+  },
   "node_modules/chart.js/auto/auto.js": {
     "file": "assets/auto-C3mEb9gQ.js",
     "name": "auto",
@@ -31,22 +52,21 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CBj8rZEp.js",
+    "file": "assets/app-DjljLk3v.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
-    "dynamicImports": [
-      "node_modules/chart.js/auto/auto.js"
-    ],
-    "css": [
-      "assets/app-MI7uxs2I.css"
-    ],
-    "assets": [
-      "assets/primeicons-DMOk5skT.eot",
-      "assets/primeicons-C6QP2o4f.woff2",
-      "assets/primeicons-WjwUDZjB.woff",
-      "assets/primeicons-MpK4pl85.ttf",
-      "assets/primeicons-Dr5RGzOO.svg"
+    "imports": [
+      "_index-De5qB6SV.js"
+    ]
+  },
+  "resources/js/appVue.js": {
+    "file": "assets/appVue-Bx1TpbjN.js",
+    "name": "appVue",
+    "src": "resources/js/appVue.js",
+    "isEntry": true,
+    "imports": [
+      "_index-De5qB6SV.js"
     ]
   }
 }

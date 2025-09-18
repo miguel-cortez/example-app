@@ -1,0 +1,1 @@
+import{c as a,_ as e,a as o,r as t,P as i,Q as p,T as r,s as c,b as n,d as m}from"./index-De5qB6SV.js";const s=a(e);s.config.globalProperties.$axios=o;window.axios=o;s.use(t);s.use(i,{theme:{preset:p}});s.use(r);s.component("Button",c);s.component("Toast",n);s.directive("tooltip",m);window.Vue=s;s.mount("#app");
