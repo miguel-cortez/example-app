@@ -57,8 +57,25 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => 'InnoDB',
+		    'dump' => [
+		        'dump_binary_path' => 'C:/wamp64/bin/mysql/mysql9.1.0/bin', // only the path, so without `mysqldump` or `pg_dump`
+		        'use_single_transaction',
+		        'timeout' => 60 * 5, // 5 minute timeout
+            ],
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                    PDO::MYSQL_ATTR_SSL_CA => (function () {
+                    $b64 = env('MYSQL_ATTR_SSL_CA_B64');
+                    if (!$b64) return null;
+
+                    // descodificar
+                    $caContent = base64_decode($b64);
+
+                    // Guardar en archivo temporal
+                    $tmpFile = sys_get_temp_dir() . '/ca_' . uniqid() . '.pem';
+                    file_put_contents($tmpFile, $caContent);
+
+                    return $tmpFile;
+                })(),
             ]) : [],
         ],
 

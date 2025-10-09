@@ -1,0 +1,31 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos de Laravel
+/node_modules
+/vendor
+/storage/*.key
+/storage/debugbar
+.env
+.env.*    # Excluir archivos de entorno de desarrollo
+.phpunit.result.cache
+/public/build
+/public/hot
+
+# npm / Vue
+npm-debug.log*
+yarn-error.log*
+dist/
+*.log
+# Caché / Artefactos de compilación
+
+*.cache
+*.tmp
+*.swp
