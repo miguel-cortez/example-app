@@ -1,5 +1,4 @@
 <template>
-    <div class="card py-4">
         <Menubar :model="items">
             <template #item="{ item, props, hasSubmenu }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
@@ -15,8 +14,10 @@
                 </a>
             </template>
         </Menubar>
-    </div>
     <router-view></router-view>
+
+    <br />
+    <h1>Prueba de credenciales</h1>
     <div v-if="credenciales.user">USUARIO: {{ credenciales.user.email }}</div>
     <Button :onClick="borrarCredenciales">Borrar credenciales</Button>
 </template>
@@ -38,7 +39,7 @@ const items = ref([
                 label: 'Productos',
                 icon: 'pi pi-tag',
                 route: '/dashboard/productos',
-                roles: ['estandar']  // AGREGADA MACV
+                roles: ['estandar','administrador']  // AGREGADA MACV
             }
         ]
     },

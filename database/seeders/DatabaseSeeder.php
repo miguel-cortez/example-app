@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         */
         $this->call(CategoriaSeeder::class);
         $this->call(ProductoSeeder::class);
+        $this->call(RolesPermisosSeeder::class); // Se debe ejecutar antes de UserSeeder
+        $this->call(UserSeeder::class); // Se debe ejecutar después de Roles y Permisos
     }
 }

@@ -14,7 +14,7 @@ const routes = [
       component: Prod, 
       meta: { 
         requiresAuth: true,
-        roles: ['estandar'] 
+        roles: ['administrador'] 
       }
     },
     { 
