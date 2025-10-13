@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("nombre",100);
             $table->integer("stock");
             $table->decimal('precio', total: 8, places: 2);
+            $table->string("imagen",150)->nullable();
             $table->string("ficha_tecnica",100)->nullable();
             $table->foreignId('categoria_id')->constrained(
                 table: 'categorias', indexName: 'productos_categoria_id'

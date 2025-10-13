@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
+// AGREGE DESDE AQUÍ
+// Para usar con Cloudinary
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+// HASTA AQUÍ
 class ProductoController extends Controller
 {
     /**
@@ -78,25 +85,66 @@ class ProductoController extends Controller
     {
         //
     }
-public function upload(Request $request){
-    try{
-        $ruta = "images/productos";
-        $info = array();
-        foreach ($request["image"] as $img){
-            $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
-            $img->move(public_path($ruta), $filename);
-            $doc = new Documento();
-            $doc->archivo = $filename;
-            $doc->ruta = $ruta;
-            $doc->estado = "C"; // C: Cargado, R: Rechazado, A: Aceptado.
-            $doc->estudiante_id = $request["estudiante_id"];
-            $doc->tipo_id = null;
-            $doc->save();
-            $info[] = $doc;
+
+    /*
+    // Función original - Para subir archivos en directorio local.
+    public function upload(Request $request){
+        try{
+            $ruta = "images/productos";
+            $info = array();
+            foreach ($request["image"] as $img){
+                $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
+                $img->move(public_path($ruta), $filename);
+                $producto = Producto::find($request["producto_id"]);
+                $producto->imagen = $filename;
+                $producto->save();
+                $info[] = $filename;
+            }
+            return response()->json(["data"=> $info, "message"=>"La imagen se ha guardado"],200);
+        }catch(\Exception $e){
+            return response()->json(["data"=> null, "message"=>$e->getMessage()],422);
+        } 
+    }
+    */
+    public function upload(Request $request){
+        // Función modificada para que trabaje con Cloudinary
+        try{
+            $ruta = "images/productos";
+            $info = array();
+            foreach ($request["image"] as $img){
+                $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
+                // Subida según FILESYSTEM_DISK (local / cloudinary)
+                if (config('filesystems.default') === 'cloudinary') {
+                    // Subida a Cloudinary
+                    Storage::disk('cloudinary')->putFileAs('images/productos/', $img, $filename);
+                } else {
+                    // Subida local (public/images/products)
+                    $img->move(public_path($ruta), $filename);
+                }
+                $producto = Producto::find($request["producto_id"]);
+                $producto->imagen = $filename;
+                $producto->save();
+                $info[] = $filename;
+            }
+            return response()->json(["data"=> $info, "message"=>"La imagen se ha guardado"],200);
+        }catch(\Exception $e){
+            return response()->json(["data"=> null, "message"=>$e],422);
+        } 
+    }
+    public function remove(Request $request){
+        try{
+            $producto = Producto::find($request["id"]);
+            $ruta = public_path("images/productos/".$producto->imagen);
+            $producto->imagen = null;
+            $producto->save();
+            if (File::exists($ruta)) {
+                File::delete($ruta);
+                return response()->json(["retorno"=> $ruta, "message"=>"Documento eliminado"],200);
+            } else {
+                return response()->json(["retorno"=> "El archivo no se eliminó", "message"=>"Documento eliminado"],200);
+            }
+        }catch(\Exception $e){
+            return response()->json(["data"=> null, "message"=>$e->getMessage()],422);
         }
-        return response()->json(["data"=> $info, "message"=>"Documentos subidos"],200);
-    }catch(\Exception $e){
-        return response()->json(["data"=> null, "message"=>$e->getMessage()],422);
-    } 
-}
+    }
 }
