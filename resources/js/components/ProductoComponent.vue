@@ -7,8 +7,35 @@
             <Column field="precio" header="Precio" style="width: 25%"></Column>
         </DataTable>
     </div>
+
+    <Button label="Subir documentos" class="mr-5 mb-5" @click="visible = true" />
+
+
+    <Dialog v-model:visible="visible" modal header="Subir documentos" :style="{ width: '26rem' }">
+    <span class="text-surface-500 dark:text-surface-400 block mb-8">Seleccione el documento a subir.</span>
+    <div class="flex items-center gap-4 mb-8">
+        <FileUpload
+            name="image[]"
+            url="/api/matricula/documento/upload"
+            @before-send="onBeforeSend"
+            @upload="onAdvancedUpload"
+            :multiple="true"
+            accept="image/*"
+            :maxFileSize="1000000"
+        />
+    </div>
+    <div class="flex justify-end gap-2">
+        <Button type="button" label="Cerrar" severity="secondary" @click="visible = false"></Button>
+    </div>
+</Dialog>
+
+
 </template>
 <script setup>
+
+const visible = ref(false);
+const dataArchivoSeleccionado = ref();
+
 import { ref, onMounted } from 'vue';
 
 import DataTable from 'primevue/datatable';

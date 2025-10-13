@@ -78,4 +78,25 @@ class ProductoController extends Controller
     {
         //
     }
+public function upload(Request $request){
+    try{
+        $ruta = "images/productos";
+        $info = array();
+        foreach ($request["image"] as $img){
+            $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
+            $img->move(public_path($ruta), $filename);
+            $doc = new Documento();
+            $doc->archivo = $filename;
+            $doc->ruta = $ruta;
+            $doc->estado = "C"; // C: Cargado, R: Rechazado, A: Aceptado.
+            $doc->estudiante_id = $request["estudiante_id"];
+            $doc->tipo_id = null;
+            $doc->save();
+            $info[] = $doc;
+        }
+        return response()->json(["data"=> $info, "message"=>"Documentos subidos"],200);
+    }catch(\Exception $e){
+        return response()->json(["data"=> null, "message"=>$e->getMessage()],422);
+    } 
+}
 }

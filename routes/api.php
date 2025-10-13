@@ -9,5 +9,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/dashboard/productos', [ProductoController::class, 'index']);
+Route::post('/dashboard/productos/upload', [DocumentoController::class, 'upload']);
 Route::get('/dashboard/productos/fichas_tecnicas', [ProductoController::class, 'obtenerFichasTecnicas']);
 Route::get('/dashboard/grafico_productos_categorias', [CategoriaController::class, 'getData']);
