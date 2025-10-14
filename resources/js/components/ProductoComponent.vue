@@ -83,6 +83,7 @@ const onBeforeSend = (event) => {
 };
 const onAdvancedUpload = (event) => {
     const obj = JSON.parse(event.xhr.response);
+    console.log(obj)
     obj.data.forEach((item)=>{
         var index = productos.value.findIndex((a) => a.id == dataArchivoSeleccionado.value.id)
         if(index != -1)
