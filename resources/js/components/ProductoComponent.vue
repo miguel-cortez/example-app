@@ -78,9 +78,11 @@ const getProductos = async () => {
     console.error(err);
   }
 };
+
 const onBeforeSend = (event) => {
   event.formData.append('producto_id', dataArchivoSeleccionado.value.id);
 };
+
 const onAdvancedUpload = (event) => {
     const obj = JSON.parse(event.xhr.response);
     console.log(obj)
@@ -93,26 +95,29 @@ const onAdvancedUpload = (event) => {
     })
     toast.add({ severity: 'info', summary: 'Satisfactorio', detail: 'Archivo(s) subido(s)', life: 3000 });
 };
+
 const selectRowUpload = (data) => {
   visible.value = true;
   dataArchivoSeleccionado.value = { ...data } // para clonar el objeto que será mostrado en vista previa.
 };
 
 
-    const selectRowRemove = async (data) => {
-        try {
-            const response = await axios.put("/api/dashboard/productos/remove",{"id":data.id});
-            var index = productos.value.findIndex((a) => a.id == data.id)
-            if(index != -1)
-            {
-                productos.value[index].imagen = null
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    };
-    const selectRowPreview = async (data) => {
-      dataArchivoSeleccionado.value = { ...data }
-      preview.value = true
-    };
+const selectRowRemove = async (data) => {
+  try {
+    const response = await axios.put("/api/dashboard/productos/remove",{"id":data.id});
+    console.log(response.data)
+    var index = productos.value.findIndex((a) => a.id == data.id)
+    if(index != -1)
+    {
+      productos.value[index].imagen = null
+    }
+  } catch (err) {
+    console.log(err)
+  }
+};
+
+const selectRowPreview = async (data) => {
+  dataArchivoSeleccionado.value = { ...data }
+  preview.value = true
+};
 </script>

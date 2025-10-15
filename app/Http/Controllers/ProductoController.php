@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 // AGREGE DESDE AQUÍ
 // Para usar con Cloudinary
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+//use Illuminate\Support\Str;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary; // SOLUCION PENDIENTE
 // HASTA AQUÍ
 class ProductoController extends Controller
@@ -148,14 +148,25 @@ class ProductoController extends Controller
     public function remove(Request $request){
         try{
             $producto = Producto::find($request["id"]);
-            $ruta = public_path("images/productos/".$producto->imagen);
-            $producto->imagen = null;
-            $producto->save();
-            if (File::exists($ruta)) {
-                File::delete($ruta);
-                return response()->json(["retorno"=> $ruta, "message"=>"Documento eliminado"],200);
-            } else {
-                return response()->json(["retorno"=> "El archivo no se eliminó", "message"=>"Documento eliminado"],200);
+            if($producto){
+                $filename = $producto->imagen;
+                $producto->imagen = null;
+                $producto->save();
+                if (config('filesystems.default') === 'cloudinary') {
+                    $filePath = 'images/productos/' . $filename;
+                    Storage::disk('cloudinary')->delete($filePath);
+                    return response()->json(["data"=> $filePath, "message"=>"Imagen eliminada"],200);
+                } else {
+                    $filePath = public_path('images/productos/'.$filename);
+                    if (File::exists($filePath)) {
+                        File::delete($filePath);
+                        return response()->json(["data"=> $filePath, "message"=>"Imagen eliminada"],200);
+                    } else {
+                        return response()->json(["data"=> $filePath, "message"=>"Imagen no encontrada"],404);
+                    }
+                }
+            }else{
+                return response()->json(["data"=> "Producto no encontrado", "message"=>"Imagen no eliminada"],404);
             }
         }catch(\Exception $e){
             return response()->json(["data"=> null, "message"=>$e->getMessage()],422);
