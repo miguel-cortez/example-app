@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 // Para usar con Cloudinary
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary; // SOLUCION PENDIENTE
 // HASTA AQUÍ
 class ProductoController extends Controller
 {
