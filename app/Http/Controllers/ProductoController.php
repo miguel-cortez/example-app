@@ -109,27 +109,33 @@ class ProductoController extends Controller
     */
     public function upload(Request $request){
         // Función modificada para que trabaje con Cloudinary
+        // $img->getClientOriginalName() OBTENER EL NOMBRE ORIGINAL
+        // $img->getClientMimeType() OBTENER EL TIPO MIME
+        // $img->getSize() OBTENER EL TAMAÑO EN BYTES
+        // $img->getClientOriginalExtension() OBTENER LA EXTESIÓN ORIGINAL
+        // $img->getRealPath() OBTIENE LA RUTA REAL. Ejemplo: C:\\wamp64\\tmp\\phpAC4A.tmp
         try{
-            $ruta = "images/productos";
             $info = array();
-            foreach ($request["image"] as $img){
-                $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
-                // Subida según FILESYSTEM_DISK (local / cloudinary)
-                if (config('filesystems.default') === 'cloudinary') {
-                    // Subida a Cloudinary
-                    Storage::disk('cloudinary')->putFileAs('images/productos/', $img, $filename);
-                } else {
-                    // Subida local (public/images/products)
-                    $img->move(public_path($ruta), $filename);
+            //foreach ($request["image"] as $img){
+            if($request->hasFile("image")){
+                foreach ($request["image"] as $img){
+                    $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
+                    if (config('filesystems.default') === 'cloudinary') {
+                        Storage::disk('cloudinary')->putFileAs('images/productos/', $img, $filename);
+                    } else {
+                        $img->move(public_path("images/productos"), $filename);
+                    }
+                    $producto = Producto::find($request["producto_id"]);
+                    $producto->imagen = $filename;
+                    $producto->save();
+                    $info[] = $filename;
                 }
-                $producto = Producto::find($request["producto_id"]);
-                $producto->imagen = $filename;
-                $producto->save();
-                $info[] = $filename;
+                return response()->json(["data"=> $info, "message"=>"La imagen se ha guardado"],200);
+            }else{
+                return response()->json(["data"=> "No se han recibido archivos", "message"=>"Datos incompletos"],500);
             }
-            return response()->json(["data"=> $info, "message"=>"La imagen se ha guardado"],200);
         }catch(\Exception $e){
-            return response()->json(["data"=> null, "message"=>$e],422);
+            return response()->json(["data"=> null, "message"=>$e->getMessage()],422);
         } 
     }
     public function remove(Request $request){
