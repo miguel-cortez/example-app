@@ -40,7 +40,7 @@
 
   <Dialog v-model:visible="preview" modal header="Vista previa" >
       <div class="flex items-center gap-4 mb-8">
-          <img v-if="dataArchivoSeleccionado" :src="`/images/productos/${dataArchivoSeleccionado.imagen.toLowerCase()}`" alt="Sin imagen" />
+          <img v-if="dataArchivoSeleccionado" :src="`https://res.cloudinary.com/dpj56vjfn/image/upload/v1760517019/images/productos/${dataArchivoSeleccionado.imagen.toLowerCase()}`" alt="Sin imagen" />
       </div>
       <div class="flex justify-end gap-2">
           <Button type="button" label="Cerrar" severity="secondary" @click="preview = false"></Button>

@@ -16,6 +16,7 @@ class ReferrerPolicyMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
-        return $response->header('Referrer-Policy', 'strict-origin-when-cross-origin'); // o la política que necesites
+        //return $response->header('Referrer-Policy', 'strict-origin-when-cross-origin');
+        return $response->header('Referrer-Policy', 'unsafe-url');
     }
 }

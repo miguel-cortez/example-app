@@ -122,6 +122,13 @@ class ProductoController extends Controller
                     $filename = Carbon::now()->timestamp . '_' . rand(1000, 9999) . '.' . $img->extension();
                     if (config('filesystems.default') === 'cloudinary') {
                         Storage::disk('cloudinary')->putFileAs('images/productos/', $img, $filename);
+                        /*
+                        $uploadedFile = Cloudinary::upload($img->getRealPath(), [
+                            'folder' => 'productos'
+                        ]);
+                        $uploadedFile->getPublicId();
+                        'url_imagen' => $uploadedFile->getSecurePath(), // URL directa de Cloudinary
+                        */
                     } else {
                         $img->move(public_path("images/productos"), $filename);
                     }
