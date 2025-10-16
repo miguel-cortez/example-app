@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\BackupAdmin;
-use App\Http\Middleware\ReferrerPolicyMiddleware;
+use App\Http\Middleware\HanddleCors;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -26,7 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withMiddleware(function (Middleware $middleware) {
 
-        $middleware->append(ReferrerPolicyMiddleware::class);
+        $middleware->append(HanddleCors::class);
 
     })
     ->create();
