@@ -10,7 +10,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/dashboard/productos', [ProductoController::class, 'index']);
-Route::post('/dashboard/productos/upload', [ProductoController::class, 'upload'])->middleware([ReferrerPolicyMiddleware::class])->name('prueba');
+//Route::post('/dashboard/productos/upload', [ProductoController::class, 'upload'])->middleware([ReferrerPolicyMiddleware::class])->name('prueba');
+Route::post('/dashboard/productos/upload', [ProductoController::class, 'upload']);
 Route::put('/dashboard/productos/remove', [ProductoController::class, 'remove']);
 Route::get('/dashboard/productos/fichas_tecnicas', [ProductoController::class, 'obtenerFichasTecnicas']);
 Route::get('/dashboard/grafico_productos_categorias', [CategoriaController::class, 'getData']);
