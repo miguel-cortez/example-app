@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\File;
 // Para usar con Cloudinary
 use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Str;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary; // SOLUCION PENDIENTE
+//use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary; // SOLUCION PENDIENTE
+//use CloudinaryLabs\Cloudinary\Facades\Cloudinary;
+//use Cloudinary\Laravel\MediaUploader\MediaUploader;
+//use CloudinaryLabs\CloudinaryLaravel\MediaUploader\MediaUploader;
+
 // HASTA AQUÍ
 class ProductoController extends Controller
 {
@@ -124,8 +128,17 @@ class ProductoController extends Controller
                         Storage::disk('cloudinary')->putFileAs('images/productos/', $img, $filename);
                         /*
                         $uploadedFile = Cloudinary::upload($img->getRealPath(), [
-                            'folder' => 'productos'
+                            'folder' => 'images/productos'
                         ]);
+                        */
+                        /*
+                        $uploaded = MediaUploader::fromFile($img)
+                            ->toFolder('images/productos')
+                            ->withPublicId('nombre-personalizado')
+                            ->upload();
+                        $info[] = $uploaded;
+                        */
+                        /*
                         $uploadedFile->getPublicId();
                         'url_imagen' => $uploadedFile->getSecurePath(), // URL directa de Cloudinary
                         */
